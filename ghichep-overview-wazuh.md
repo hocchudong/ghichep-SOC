@@ -1,6 +1,6 @@
 ## 1. Giới thiệu về Wazuh
 
-Wazuh là 1 project mã nguồn dùng cho việc bảo vệ an ninh. Được xây dựng từ các thành phần : OSSEC HIDS, OpenSCAP và Elastic Stack
+Wazuh là 1 project mã nguồn dùng cho việc bảo vệ an ninh. Được xây dựng từ các thành phần : OSSEC HIDS, OpenSCAP và Elastic Stack.
 
 ![wazuh](/images/wazuh-00.png)
 
