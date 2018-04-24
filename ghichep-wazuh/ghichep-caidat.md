@@ -352,9 +352,7 @@ curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | apt-key add -
 
  - Tìm tên của OS và thêm vào repo
 ```sh
-CODENAME=$(lsb_release -cs)
-echo "deb https://packages.wazuh.com/apt $CODENAME main" \
-| tee /etc/apt/sources.list.d/wazuh.list
+echo "deb https://packages.wazuh.com/3.x/apt/ stable main" | tee /etc/apt/sources.list.d/wazuh.list
 ```
 
  - Update thông tin package
@@ -376,8 +374,8 @@ cat > /etc/yum.repos.d/wazuh.repo <<\EOF
 gpgcheck=1
 gpgkey=https://packages.wazuh.com/key/GPG-KEY-WAZUH
 enabled=1
-name=CentOS-$releasever - Wazuh
-baseurl=https://packages.wazuh.com/yum/el/$releasever/$basearch
+name=Wazuh repository
+baseurl=https://packages.wazuh.com/3.x/yum/
 protect=1
 EOF
 ```
@@ -387,62 +385,10 @@ EOF
 cat > /etc/yum.repos.d/wazuh.repo <<\EOF
 [wazuh_repo]
 gpgcheck=1
-gpgkey=https://packages.wazuh.com/key/RPM-GPG-KEY-OSSEC-RHEL5
+gpgkey=http://packages.wazuh.com/key/GPG-KEY-WAZUH-5
 enabled=1
-name=CentOS-$releasever - Wazuh
-baseurl=https://packages.wazuh.com/yum/el/$releasever/$basearch
-protect=1
-EOF
-```
-
- - Với RHEL :
-```sh
-cat > /etc/yum.repos.d/wazuh.repo <<\EOF
-[wazuh_repo]
-gpgcheck=1
-gpgkey=https://packages.wazuh.com/key/GPG-KEY-WAZUH
-enabled=1
-name=RHEL-$releasever - Wazuh
-baseurl=https://packages.wazuh.com/yum/rhel/$releasever/$basearch
-protect=1
-EOF
-```
-
- - Với RHEL5 :
-```sh
-cat > /etc/yum.repos.d/wazuh.repo <<\EOF
-[wazuh_repo]
-gpgcheck=1
-gpgkey=https://packages.wazuh.com/key/RPM-GPG-KEY-OSSEC-RHEL5
-enabled=1
-name=RHEL-$releasever - Wazuh
-baseurl=https://packages.wazuh.com/yum/rhel/$releasever/$basearch
-protect=1
-EOF
-```
-
- - Với Fedora :
-```sh
-cat > /etc/yum.repos.d/wazuh.repo <<\EOF
-[wazuh_repo]
-gpgcheck=1
-gpgkey=https://packages.wazuh.com/key/GPG-KEY-WAZUH
-name=Fedora-$releasever - Wazuh
-enabled=1
-baseurl=https://packages.wazuh.com/yum/fc/$releasever/$basearch
-protect=1
-EOF
-```
-
- - Với Amazon Linux :
-```sh
-cat > /etc/yum.repos.d/wazuh.repo <<\EOF
-[wazuh_repo]
-gpgcheck=1
-gpgkey=https://packages.wazuh.com/key/GPG-KEY-WAZUH
-name=Amazon Linux - Wazuh
-enabled=1
-baseurl=https://packages.wazuh.com/yum/el/7/$basearch
+name=Wazuh repository
+baseurl=http://packages.wazuh.com/3.x/yum/5/
 protect=1
 EOF
 ```
