@@ -314,13 +314,14 @@ Chúng ta sẽ register Wazuh API (đã được install trên Wazuh server) t�
 
  - Trước khi thêm các field, tới Wazuh server và sử dụng cmd với quyền root set thông tin bảo mật cho Wazuh API :
 ```sh
-# Replace your desired username for myUserName.
-$ cd /var/ossec/api/configuration/auth
-$ sudo node htpasswd -c user myUserName
+cd /var/ossec/api/configuration/auth
+sudo node htpasswd -c user myUserName
+```
 
-# Do not forget to restart the API to apply the changes:
-$ systemctl restart wazuh-api
-$ service wazuh-api restart
+ - Restart service
+```sh
+systemctl restart wazuh-api
+service wazuh-api restart
 ```
 
  - Điền username/password với thông tin thích hợp bạn tạo ở bước trước. Nhập `http://MANAGER_IP`cho URL với `MANAGER_IP` là IP của Wazuh server. Nhập `55000` cho port.
