@@ -9,8 +9,8 @@ cat > /etc/yum.repos.d/wazuh.repo <<\EOF
 gpgcheck=1
 gpgkey=https://packages.wazuh.com/key/GPG-KEY-WAZUH
 enabled=1
-name=CentOS-$releasever - Wazuh
-baseurl=https://packages.wazuh.com/yum/el/$releasever/$basearch
+name=Wazuh repository
+baseurl=https://packages.wazuh.com/3.x/yum/
 protect=1
 EOF
 ```
@@ -96,9 +96,9 @@ Filebeat giúp Wazuh server vận chuyển các cảnh báo và archived event m
 rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
 
 cat > /etc/yum.repos.d/elastic.repo << EOF
-[elastic-5.x]
-name=Elastic repository for 5.x packages
-baseurl=https://artifacts.elastic.co/packages/5.x/yum
+[elasticsearch-6.x]
+name=Elasticsearch repository for 6.x packages
+baseurl=https://artifacts.elastic.co/packages/6.x/yum
 gpgcheck=1
 gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
 enabled=1
@@ -109,13 +109,12 @@ EOF
 
  - Cài đặt Filebeat :
 ```sh
-yum install filebeat -y
+yum install filebeat-6.2.4 -y
 ```
 
  - Download Filebeat config file từ Wazuh repo để cấu hình chỏ Wazuh alert tới Logstash :
 ```sh
-curl -so /etc/filebeat/filebeat.yml https://raw.githubusercontent.com/wazuh/wazuh/2.0/extensions/filebeat/filebeat.yml
-```
+curl -so /etc/filebeat/filebeat.yml https://raw.githubusercontent.com/wazuh/wazuh/3.2/extensions/filebeat/filebeat.yml```
 
  - Sửa file `/etc/filebeat/filebeat.yml` và thay thế `ELASTIC_SERVER_IP` với IP của máy Elastic stack.
 ```sh
@@ -144,36 +143,39 @@ Tham khảo việc cài đặt Elastic Stack tại [đây]()
 
  - Load Wazuh Elasticsearch template : 
 ```sh
-curl https://raw.githubusercontent.com/wazuh/wazuh-kibana-app/master/server/startup/integration_files/template_file.json | curl -XPUT 'http://localhost:9200/_template/wazuh' -H 'Content-Type: application/json' -d @-
+curl https://raw.githubusercontent.com/wazuh/wazuh/3.2/extensions/elasticsearch/wazuh-elastic6-template-alerts.json | curl -XPUT 'http://localhost:9200/_template/wazuh' -H 'Content-Type: application/json' -d @-
 ```
 
- - Insert sample alert :
-```sh
-curl https://raw.githubusercontent.com/wazuh/wazuh-kibana-app/master/server/startup/integration_files/alert_sample.json | curl -XPUT "http://localhost:9200/wazuh-alerts-"`date +%Y.%m.%d`"/wazuh/sample" -H 'Content-Type: application/json' -d @-
-```
 
  - Dowload Wazuh config và template file cho Logstash :
+	- Với mô hình All-in-one
+	
 ```sh
-curl -so /etc/logstash/conf.d/01-wazuh.conf https://raw.githubusercontent.com/wazuh/wazuh/2.0/extensions/logstash/01-wazuh.conf
-curl -so /etc/logstash/wazuh-elastic5-template.json https://raw.githubusercontent.com/wazuh/wazuh/2.0/extensions/elasticsearch/wazuh-elastic5-template.json
+curl -so /etc/logstash/conf.d/01-wazuh.conf https://raw.githubusercontent.com/wazuh/wazuh/3.2/extensions/logstash/01-wazuh-local.conf
+
+usermod -a -G ossec logstash
 ```
 
- - Làm bước sau nếu mô hình cài đặt là `All-in-one` :
-	 - Sửa `/etc/logstash/conf.d/01-wazuh.conf`, comment input section `Remote Wazuh Manager - Filebeat input` và uncomment `Local Wazuh Manager - JSON file input`. Lúc này Logstash sẽ được Wazuh `alerts.json` file trực tiếp từ local filesystem.
-	 - Bởi vì Logstash user cần đọc alerts.json file, add OSSEC group :
+	- Với mô hình Distribute :
+
 ```sh
-$ usermod -a -G ossec logstash
-
- If you use CentOS-6/RHEL-6 or Amazon AMI, in this versions Logstash use Upstart like service manager, this service manager contains a `bug <https://bugs.launchpad.net/upstart/+bug/812870/>`_ in this case, follow the next steps::
-
-  1) Edith the file /etc/logstash/startup.options and in the line 30 change the LS_GROUP=logstash to LS_GROUP=ossec.
-  2) Update the service with the new parameters run the command /usr/share/logstash/bin/system-install
-  3) Start Logstash again.
+curl -so /etc/logstash/conf.d/01-wazuh.conf https://raw.githubusercontent.com/wazuh/wazuh/3.2/extensions/logstash/01-wazuh-remote.conf
 ```
+
+Follow các bước sau nếu bạn sử dụng Centos6/RHEL6 hoặc Amazon AMI (logstash sử dụng Upstart như service manager và cần sửa, xem bug [sau](https://bugs.launchpad.net/upstart/+bug/812870/) )
+	 - Sửa file `/etc/logstash/startup.options` ở dòng 30 từ `LS_GROUP=logstash` thành `LS_GROUP=ossec`.
+	 - Update service với tham số mới bằng câu lệnh `/usr/share/logstash/bin/system-install`
+	 - Restart service
 
  - Install Wazuh App plugin cho Kibana :
+
+Tăng giá trị mặc định `heap memory limit` của Node.js để bảo vệ memory khỏi lỗi khi install Wazuh APP. Set giá trị mặc định như sau :
 ```sh
-/usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp.zip
+export NODE_OPTIONS="--max-old-space-size=3072"
+```
+
+```sh
+/usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-3.2.1_6.2.4.zip
 ```
 
 ## 4. Kết nối Wazuh App với API
