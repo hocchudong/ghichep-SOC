@@ -2,6 +2,11 @@
 
 ### 1. Cài đặt Wazuh server
 
+ -  Install java 8
+```sh
+yum install java-1.8.0-openjdk -y
+```
+
  - Thêm repo :
 ```sh
 cat > /etc/yum.repos.d/wazuh.repo <<\EOF
@@ -139,33 +144,134 @@ output:
 	
 Khi đã cấu hình xong manager, API và Filebeat (nếu cần thiết), bạn có thể cài đặt Elastic Stack.
 
-Tham khảo việc cài đặt Elastic Stack tại [đây]()
+### 4. Cài đặt Elasticsearch
+
+ - Thêm repo
+```sh
+rpm --import http://packages.elastic.co/GPG-KEY-elasticsearch
+```
+
+ - Thêm file repo
+```sh
+cat <<EOF > /etc/yum.repos.d/elasticsearch.repo
+[elasticsearch-6.x]
+name=Elasticsearch repository for 6.x packages
+baseurl=https://artifacts.elastic.co/packages/6.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+EOF
+```
+
+ - Cài đặt elastic
+```sh
+yum install elasticsearch -y
+```
+
+ - Thêm rule firewall
+```sh
+firewall-cmd --add-port=9200/tcp
+firewall-cmd --add-port=9200/tcp --permanent
+```
+
+ - Kiểm tra dịch vụ Elasticsearch
+```sh
+curl -X GET http://localhost:9200
+```
 
  - Load Wazuh Elasticsearch template : 
 ```sh
 curl https://raw.githubusercontent.com/wazuh/wazuh/3.2/extensions/elasticsearch/wazuh-elastic6-template-alerts.json | curl -XPUT 'http://localhost:9200/_template/wazuh' -H 'Content-Type: application/json' -d @-
 ```
 
+ - Start và enable service
+```sh
+systemctl daemon-reload
+systemctl enable elasticsearch
+systemctl start elasticsearch
+```
+
+### 5. Cài đặt Logstash
+
+ - Thêm file repo :
+```sh
+cat << EOF > /etc/yum.repos.d/logstash.repo
+[logstash-6.x]
+name=Elastic repository for 6.x packages
+baseurl=https://artifacts.elastic.co/packages/6.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+EOF
+```
+
+ - Cài đặt Logstash
+```sh
+yum install logstash -y
+```
 
  - Dowload Wazuh config và template file cho Logstash :
-	- Với mô hình All-in-one
-	
+ 
+Với mô hình All-in-one
 ```sh
 curl -so /etc/logstash/conf.d/01-wazuh.conf https://raw.githubusercontent.com/wazuh/wazuh/3.2/extensions/logstash/01-wazuh-local.conf
+```
 
+ - Thêm usermode
+```sh
 usermod -a -G ossec logstash
 ```
 
-	- Với mô hình Distribute :
-
+Với mô hình Distribute :
 ```sh
 curl -so /etc/logstash/conf.d/01-wazuh.conf https://raw.githubusercontent.com/wazuh/wazuh/3.2/extensions/logstash/01-wazuh-remote.conf
 ```
 
 Follow các bước sau nếu bạn sử dụng Centos6/RHEL6 hoặc Amazon AMI (logstash sử dụng Upstart như service manager và cần sửa, xem bug [sau](https://bugs.launchpad.net/upstart/+bug/812870/) )
+
 	 - Sửa file `/etc/logstash/startup.options` ở dòng 30 từ `LS_GROUP=logstash` thành `LS_GROUP=ossec`.
 	 - Update service với tham số mới bằng câu lệnh `/usr/share/logstash/bin/system-install`
 	 - Restart service
+
+ - Start và enable service
+```sh
+systemctl daemon-reload
+systemctl start logstash
+systemctl enable logstash
+```
+
+ - Cấu hình firewall cho phép Logstash nhận log từ client (port 5044)
+```sh
+firewall-cmd --add-port=5044/tcp
+firewall-cmd --add-port=5044/tcp --permanent
+```
+
+### 6. Cài đặt Kibana
+
+ - Tạo repo cài đặt Kibana :
+```sh
+cat <<EOF > /etc/yum.repos.d/kibana.repo
+[kibana-6.x]
+name=Kibana repository for 6.x packages
+baseurl=https://artifacts.elastic.co/packages/6.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+EOF
+```
+
+ - Cài đặt Kibana :
+```sh
+yum install kibana -y
+sed -i 's/#server.host: "localhost"/server.host: "0.0.0.0"/'g /etc/kibana/kibana.yml
+```
+
 
  - Install Wazuh App plugin cho Kibana :
 
@@ -177,6 +283,22 @@ export NODE_OPTIONS="--max-old-space-size=3072"
 ```sh
 /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-3.2.1_6.2.4.zip
 ```
+
+ - Start và enable Kibana
+```sh
+systemctl daemon-reload
+systemctl start kibana
+systemctl enable kibana
+```
+
+ - Cho phép truy cập Kibana web interface (port 5601)
+```sh
+firewall-cmd --add-port=5601/tcp
+firewall-cmd --add-port=5601/tcp --permanent
+```
+
+ - Chạy Kibana : http://192.168.0.29:5601
+ 
 
 ## 4. Kết nối Wazuh App với API
 
