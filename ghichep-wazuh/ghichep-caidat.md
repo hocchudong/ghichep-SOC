@@ -90,6 +90,20 @@ yum install -y python27
 yum install -y python27
 ```
 
+ - Mở port 1515 cho phép Wazuh agent kết nối : 
+```sh
+firewall-cmd --add-port=1515/tcp
+firewall-cmd --add-port=1515/tcp --permanent
+firewall-cmd --add-port=55000/tcp
+firewall-cmd --add-port=55000/tcp --permanent
+firewall-cmd --add-port=1514/udp
+firewall-cmd --add-port=1514/udp --permanent
+firewall-cmd --add-port=514/tcp
+firewall-cmd --add-port=514/tcp --permanent
+firewall-cmd --add-port=514/udp
+firewall-cmd --add-port=514/udp --permanent
+```
+
 ### 3. Cài đặt Filebeat
 
 Filebeat giúp Wazuh server vận chuyển các cảnh báo và archived event một cách an toàn tới Logstash service trên Elastic Stack server.
@@ -321,7 +335,6 @@ sudo node htpasswd -c user myUserName
  - Restart service
 ```sh
 systemctl restart wazuh-api
-service wazuh-api restart
 ```
 
  - Điền username/password với thông tin thích hợp bạn tạo ở bước trước. Nhập `http://MANAGER_IP`cho URL với `MANAGER_IP` là IP của Wazuh server. Nhập `55000` cho port.
@@ -414,5 +427,5 @@ azuh-agent-2.0.exe /S
 Mặc định tất cả file agent được đặt tại : `C:\Program Files(x86)\ossec-agent`
 
 
-
+Sau khi cài đặt xong cần cấu hình kết nối từ agent với Manager. Tham khảo link [sau]()
  
