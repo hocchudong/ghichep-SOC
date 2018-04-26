@@ -1,4 +1,83 @@
-## Tiến trình registration tại agent
+## 1. Cài đặt Wazuh agent
+
+### 1.1. Cài đặt Wazuh agent trên Debian/Ubuntu
+
+Thêm Wazuh repo 
+
+ - Cài đặt các gói bổ trợ :
+```sh
+apt-get install curl apt-transport-https lsb-release -y
+```
+
+ - Install Wazuh repo GPG key :
+```sh
+curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | apt-key add -
+```
+
+ - Tìm tên của OS và thêm vào repo
+```sh
+echo "deb https://packages.wazuh.com/3.x/apt/ stable main" | tee /etc/apt/sources.list.d/wazuh.list
+```
+
+ - Update thông tin package
+```sh
+apt-get update -y
+```
+
+ - Install Wazuh agent
+```sh
+apt-get install wazuh-agent -y
+```
+
+### 1.2. Cài đặt Wazuh-agent trên Centos/RHEL
+
+ - Thêm repo với Centos :
+```sh
+cat > /etc/yum.repos.d/wazuh.repo <<\EOF
+[wazuh_repo]
+gpgcheck=1
+gpgkey=https://packages.wazuh.com/key/GPG-KEY-WAZUH
+enabled=1
+name=Wazuh repository
+baseurl=https://packages.wazuh.com/3.x/yum/
+protect=1
+EOF
+```
+
+ - Thêm repo với Centos-5 :
+```sh
+cat > /etc/yum.repos.d/wazuh.repo <<\EOF
+[wazuh_repo]
+gpgcheck=1
+gpgkey=http://packages.wazuh.com/key/GPG-KEY-WAZUH-5
+enabled=1
+name=Wazuh repository
+baseurl=http://packages.wazuh.com/3.x/yum/5/
+protect=1
+EOF
+```
+
+ - Cài đặt Wazuh agent 
+```sh
+yum install wazuh-agent -y
+```
+
+### 1.3. Với agent là Windows 
+ 
+ - Dowload package từ source : https://documentation.wazuh.com/2.0/installation-guide/packages-list/index.html 
+  
+ - **Cách 1**: Sử dụng cmd để cài đặt :
+```sh
+azuh-agent-2.0.exe /S
+```
+
+ - **Cách 2** : Sử dụng GUI : Double-click vào file dowload và cài đặt với mặc định. Một khi cài đặt xong, agent sẽ có giao diện đồ họa để cấu hình, mở log file hoặc start/stop service :
+
+![wazuh](/images/wazuh-13.png)
+ 
+Mặc định tất cả file agent được đặt tại : `C:\Program Files(x86)\ossec-agent`
+
+## 2. Tiến trình registration tại agent
 
 Mỗi khi Wazuh  Agent gửi dữ liệu tới Wazuh Manager thông qua một phương thức an toàn là gọi OSSEC message protocol, phương thức này sẽ mã hóa message bằng pre-shared key. Lúc đầu khi bạn cài đặt thành công Wazuh Agent sẽ không thể kết nối với Wazuh Manager vì thiếu pre-shared key.
 
@@ -6,7 +85,7 @@ Quá trình **registration** bao gồm việc tạo 1 mối quan hệ tin cậy 
 
 Một cách tiếp cận khác là sử dụng RESTful API.
 
-## 1. Agent keys
+ - Agent keys
 
 Manager sử dụng file `/var/ossec/etc/client.keys` để lưu trữ registration record cho mỗi agent, bao gồm `ID`, `name`, `IP` và `key`. VD :
 ```sh
@@ -32,7 +111,7 @@ Có 1 số cách để đặt agent IP :
  
 Một số phương thức registration tự động phát hiện IP của agent trong quá trình registration
 
-## 2. Register cho các Agent
+## 3. Register cho các Agent
 
 Trong phần này sẽ hướng dẫn cách register để giám sát các agent :
 
@@ -141,7 +220,7 @@ VD : Một agent tên là `Server` với IP 10.0.0.10 đã được install và 
 /var/ossec/bin/manage_agents -n Server1 -a 10.10.10.10 -F 0
 ```
 
-## 3. List các agent được cài đặt và remove agent
+## 4. List các agent được cài đặt và remove agent
 
  - List các agent đã register trên Manager :
 ```sh
@@ -190,6 +269,9 @@ Agent '001' removed.
 manage_agents: Exiting.
 ```
 
- - Login vào Wazuh Interface với IP : http://MANAGER_IP:5601
+ - Login vào Wazuh Interface với IP : http://MANAGER_IP:5601 và kiểm tra các agent đã register :
+ ![wazuh](/images/wazuh-17.png)
+ 
+ ![wazuh](/images/wazuh-18.png)
  
 
