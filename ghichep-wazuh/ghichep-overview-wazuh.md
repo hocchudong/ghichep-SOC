@@ -32,7 +32,7 @@ Sơ đồ sau thể hiện các internal task và process diễn ra trên các a
 
 Tất cả các process agent có mục tiêu và thiết lập khác nhau. 
 
- - **Rootcheck** : Thực hiện các task liên quan đến phát hiện về `rootfits`, `malware` và các bất thường của hệ thống. Nó chạy 1 số công cụ kiểm tra an ninh cơ bản dựa vào các file cấu hình hệ thống.
+ - **Rootcheck** : Thực hiện các task liên quan đến phát hiện về `Rootkits`, `malware` và các bất thường của hệ thống. Nó chạy 1 số công cụ kiểm tra an ninh cơ bản dựa vào các file cấu hình hệ thống.
  - **Log Collector**: Dùng để đọc và thu thập các log message, bao gồm các các file flat log như Windows event log và thậm chí là Windows Event Channel. Nó cũng được cấu hình để chạy định kỳ và bắt 1 số output của các câu lệnh cụ thể.
  - **Syscheck** : Process này thực hiện file integrity monitoring (FIM) (Giám sát tính toàn vẹn của file). Nó cũng có thể giám sát registry key trên Windows. Nó sẽ bắt các thay đổi về nội dung file, quyền và các thuộc tính khác, cũng như phát hiện việc tạo và xóa file.
  - **OpenSCAP** : Được dùng để publish OVAL và XCCDF dựa vào các hồ sơ bảo mật cơ bản, định kỳ quét hệ thống, nó sẽ phát hiện được các ứng dụng và cấu hình sẽ bị tấn công, không tuân theo các chuẩn được xác định theo CIS (Center of Internet Security)
@@ -40,7 +40,7 @@ Tất cả các process agent có mục tiêu và thiết lập khác nhau.
  
 Chú giải : 
 
- - Rootfits : Phần mềm hoặc công cụ phần mềm che giấu sự tồn tại của 1 phần mềm khác, thường là virus xâm nhập vào hệ thống.
+ - Rootkits : Phần mềm hoặc công cụ phần mềm che giấu sự tồn tại của 1 phần mềm khác, thường là virus xâm nhập vào hệ thống.
  - Malware : Mọi loại mã gây hại trên máy tính người dùng : spyware, trojan, virus...
  
 ### 2.2. Wazuh server
