@@ -8,7 +8,7 @@
  
 ### Thực hành 
 
- - [Hướng dẫn cài đặt và cấu hình Wazuh server(Mô hình All-in-one) ](https://github.com/hocchudong/ghichep-SOC/blob/master/ghichep-wazuh/ghichep-caidat.md)
+ - [Hướng dẫn cài đặt và cấu hình Wazuh server (Mô hình All-in-one) ](https://github.com/hocchudong/ghichep-SOC/blob/master/ghichep-wazuh/ghichep-caidat.md)
  - [Hướng dẫn cài đặt và cấu hinh Wazuh agent](https://github.com/hocchudong/ghichep-SOC/blob/master/ghichep-wazuh/ghichep-cauhinh-agent.md)
  
  
