@@ -2,13 +2,11 @@
 
 **Cấu hình yêu cầu** :
 
-Với nhu cầu giám sát an ninh và thu thập log tập trung cho hệ thống từ 15-20 server. Cần yêu cầu cấu hình như sau :
+Với nhu cầu giám sát an ninh và thu thập log tập trung cho hệ thống từ 15-20 server. 
 
- - OS : Centos 7.3
- - Cấu hình phần cứng : 
-	- RAM : 12-16GB
-	- CPU : 8-12 cores
-	- HDD : 200-500GB
+Cấu hình yêu cầu như sau :
+
+ ![wazuh](/images/wazuh-23.png)
 	
 Mô hình triển khai : 
 
