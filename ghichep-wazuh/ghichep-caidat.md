@@ -12,7 +12,7 @@ Với nhu cầu giám sát an ninh và thu thập log tập trung cho hệ thố
 	
 Mô hình triển khai : 
 
- ![wazuh](/images/wazuh-23.png)
+ ![wazuh](/images/wazuh-24.png)
 
 ### 1. Cài đặt Wazuh server
 
