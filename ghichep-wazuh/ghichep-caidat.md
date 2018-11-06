@@ -312,7 +312,7 @@ export NODE_OPTIONS="--max-old-space-size=3072"
 ```
 
 ```sh
-/usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-3.2.1_6.2.4.zip
+sudo -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-3.6.1_6.4.2.zip
 ```
 
  - Start và enable Kibana
