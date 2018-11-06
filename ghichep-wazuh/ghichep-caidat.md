@@ -244,7 +244,8 @@ yum install logstash -y
 
  - Dowload Wazuh config và template file cho Logstash :
  
-Với mô hình All-in-one
+**Mô hình All-in-one**
+
 ```sh
 curl -so /etc/logstash/conf.d/01-wazuh.conf https://raw.githubusercontent.com/wazuh/wazuh/3.2/extensions/logstash/01-wazuh-local.conf
 ```
@@ -254,7 +255,8 @@ curl -so /etc/logstash/conf.d/01-wazuh.conf https://raw.githubusercontent.com/wa
 usermod -a -G ossec logstash
 ```
 
-Với mô hình Distribute :
+**Mô hình Distribute**
+
 ```sh
 curl -so /etc/logstash/conf.d/01-wazuh.conf https://raw.githubusercontent.com/wazuh/wazuh/3.2/extensions/logstash/01-wazuh-remote.conf
 ```
