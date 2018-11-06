@@ -144,8 +144,9 @@ yum install filebeat-6.2.4 -y
 ```
 
  - Download Filebeat config file từ Wazuh repo để cấu hình chỏ Wazuh alert tới Logstash :
+ 
 ```sh
-curl -so /etc/filebeat/filebeat.yml https://raw.githubusercontent.com/wazuh/wazuh/3.2/extensions/filebeat/filebeat.yml```
+curl -so /etc/filebeat/filebeat.yml https://raw.githubusercontent.com/wazuh/wazuh/3.2/extensions/filebeat/filebeat.yml
 ```
 
  - Sửa file `/etc/filebeat/filebeat.yml` và thay thế `ELASTIC_SERVER_IP` với IP của máy Elastic stack.
