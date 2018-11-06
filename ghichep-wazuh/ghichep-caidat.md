@@ -354,7 +354,10 @@ sudo node htpasswd -c user myUserName
 systemctl restart wazuh-api
 ```
 
- - Điền username/password với thông tin thích hợp bạn tạo ở bước trước. Nhập `http://MANAGER_IP`cho URL với `MANAGER_IP` là IP của Wazuh server. Nhập `55000` cho port.
+Các thông tin cần nhập như sau : 
+ - user/password : Thông tin tạo bước trước.
+ - URL : http://MANAGER_IP . Với `MANAGER_IP` là IP của Wazuh server
+ - Port : 55000
  
 ![wazuh](/images/wazuh-12.png)
 
