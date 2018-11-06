@@ -204,6 +204,13 @@ firewall-cmd --add-port=9200/tcp
 firewall-cmd --add-port=9200/tcp --permanent
 ```
 
+ - Start và enable service
+```sh
+systemctl daemon-reload
+systemctl enable elasticsearch
+systemctl start elasticsearch
+```
+
  - Kiểm tra dịch vụ Elasticsearch
 ```sh
 curl -X GET http://localhost:9200
@@ -214,12 +221,6 @@ curl -X GET http://localhost:9200
 curl https://raw.githubusercontent.com/wazuh/wazuh/3.2/extensions/elasticsearch/wazuh-elastic6-template-alerts.json | curl -XPUT 'http://localhost:9200/_template/wazuh' -H 'Content-Type: application/json' -d @-
 ```
 
- - Start và enable service
-```sh
-systemctl daemon-reload
-systemctl enable elasticsearch
-systemctl start elasticsearch
-```
 
 ### 5. Cài đặt Logstash
 
