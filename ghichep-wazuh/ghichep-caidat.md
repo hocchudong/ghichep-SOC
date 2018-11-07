@@ -332,7 +332,7 @@ firewall-cmd --add-port=5601/tcp --permanent
 
 - Disable repo Elasticsearch để tránh việc update : 
 ```sh
- sed -i "s/^enabled=1/enabled=0/" /etc/yum.repos.d/elastic.repo
+ sed -i "s/^enabled=1/enabled=0/" /etc/yum.repos.d/elasticsearch.repo
  ```
 
  - Chạy Kibana : http://192.168.0.29:5601
