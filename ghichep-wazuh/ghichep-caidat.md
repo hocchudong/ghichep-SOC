@@ -140,7 +140,7 @@ EOF
 
  - Cài đặt Filebeat :
 ```sh
-yum install filebeat-6.2.4 -y
+yum install filebeat-6.4.2 -y
 ```
 
  - Download Filebeat config file từ Wazuh repo để cấu hình chỏ Wazuh alert tới Logstash :
@@ -174,6 +174,8 @@ Khi đã cấu hình xong manager, API và Filebeat (nếu cần thiết), bạn
 
 ### 4. Cài đặt Elasticsearch
 
+ - Chú ý kiểm tra việc cài đặt java 8 ở bước đầu.
+
  - Thêm repo
 ```sh
 rpm --import http://packages.elastic.co/GPG-KEY-elasticsearch
@@ -195,7 +197,7 @@ EOF
 
  - Cài đặt elastic
 ```sh
-yum install elasticsearch -y
+yum install elasticsearch-6.4.2 -y
 ```
 
  - Thêm rule firewall
@@ -240,7 +242,7 @@ EOF
 
  - Cài đặt Logstash
 ```sh
-yum install logstash -y
+yum install logstash-6.4.2 -y
 ```
 
  - Dowload Wazuh config và template file cho Logstash :
@@ -299,7 +301,7 @@ EOF
 
  - Cài đặt Kibana :
 ```sh
-yum install kibana -y
+yum install kibana-6.4.2 -y
 sed -i 's/#server.host: "localhost"/server.host: "0.0.0.0"/'g /etc/kibana/kibana.yml
 ```
 
@@ -327,6 +329,11 @@ systemctl enable kibana
 firewall-cmd --add-port=5601/tcp
 firewall-cmd --add-port=5601/tcp --permanent
 ```
+
+- Disable repo Elasticsearch để tránh việc update : 
+```sh
+ sed -i "s/^enabled=1/enabled=0/" /etc/yum.repos.d/elastic.repo
+ ```
 
  - Chạy Kibana : http://192.168.0.29:5601
  
