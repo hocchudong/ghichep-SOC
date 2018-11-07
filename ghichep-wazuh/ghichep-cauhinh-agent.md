@@ -64,11 +64,11 @@ yum install wazuh-agent -y
 
 ### 1.3. Với agent là Windows 
  
- - Dowload package từ source : https://documentation.wazuh.com/2.0/installation-guide/packages-list/index.html 
+ - Dowload package từ source : https://documentation.wazuh.com/current/installation-guide/packages-list/index.html
   
  - **Cách 1**: Sử dụng cmd để cài đặt :
 ```sh
-azuh-agent-2.0.exe /S
+wazuh-agent-3.6.1-1.msi /q
 ```
 
  - **Cách 2** : Sử dụng GUI : Double-click vào file dowload và cài đặt với mặc định. Một khi cài đặt xong, agent sẽ có giao diện đồ họa để cấu hình, mở log file hoặc start/stop service :
